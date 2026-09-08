@@ -19,6 +19,8 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final statusAsync = ref.watch(myVehiclesStatusProvider);
     final unreadCount = ref.watch(unreadNotificationCountProvider).valueOrNull ?? 0;
+    final vehicles = statusAsync.valueOrNull;
+    final firstVehicleCityId = (vehicles != null && vehicles.isNotEmpty) ? vehicles.first.cityId : null;
 
     // Registers/refreshes this device's push token for the current session.
     ref.watch(pushInitProvider);
@@ -35,6 +37,11 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Mis vehículos'),
         actions: [
+          IconButton(
+            tooltip: 'Planificar ruta',
+            icon: const Icon(Icons.alt_route),
+            onPressed: () => context.push('/route-planner', extra: firstVehicleCityId),
+          ),
           IconButton(
             tooltip: 'Notificaciones',
             icon: Badge(

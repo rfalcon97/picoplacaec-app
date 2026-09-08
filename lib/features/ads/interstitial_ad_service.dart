@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../core/ad_config.dart';
@@ -26,21 +28,30 @@ class InterstitialAdService {
     );
   }
 
-  void showIfReady() {
+  /// Shows the preloaded ad if one is ready, and completes once it's been
+  /// dismissed (or immediately if no ad was available) — so callers that
+  /// need to gate an action behind the ad, not just fire-and-forget it, can
+  /// `await` this instead of the previous void return.
+  Future<void> showIfReady() {
     final ad = _ad;
-    if (ad == null) return;
+    if (ad == null) return Future.value();
+
     _ad = null;
+    final completer = Completer<void>();
     ad.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (ad) {
         ad.dispose();
         preload();
+        if (!completer.isCompleted) completer.complete();
       },
       onAdFailedToShowFullScreenContent: (ad, error) {
         ad.dispose();
         preload();
+        if (!completer.isCompleted) completer.complete();
       },
     );
     ad.show();
+    return completer.future;
   }
 
   void dispose() {

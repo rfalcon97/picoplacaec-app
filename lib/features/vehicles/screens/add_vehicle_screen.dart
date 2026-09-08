@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api_error.dart';
+import '../../ads/banner_ad_widget.dart';
 import '../../cities/state/cities_provider.dart';
 import '../state/vehicles_provider.dart';
 
@@ -214,6 +215,7 @@ class _AddVehicleScreenState extends ConsumerState<AddVehicleScreen> {
           ),
         ),
       ),
+      bottomNavigationBar: const BannerAdWidget(),
     );
   }
 }

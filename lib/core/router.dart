@@ -7,6 +7,7 @@ import '../features/auth/screens/reset_password_screen.dart';
 import '../features/auth/state/auth_controller.dart';
 import '../features/cities/screens/city_schedule_screen.dart';
 import '../features/notifications/screens/notification_history_screen.dart';
+import '../features/routes/screens/route_planner_screen.dart';
 import '../features/vehicles/screens/add_vehicle_screen.dart';
 import '../features/vehicles/screens/home_screen.dart';
 import 'splash_screen.dart';
@@ -33,6 +34,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => CityScheduleScreen(citySlug: state.pathParameters['slug']!),
       ),
       GoRoute(path: '/notification-history', builder: (context, state) => const NotificationHistoryScreen()),
+      GoRoute(
+        path: '/route-planner',
+        builder: (context, state) => RoutePlannerScreen(initialCityId: state.extra as String?),
+      ),
       GoRoute(path: '/forgot-password', builder: (context, state) => const ForgotPasswordScreen()),
       GoRoute(
         path: '/reset-password',
